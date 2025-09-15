@@ -4,18 +4,151 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coordina</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #4299e1 0%, #2b6cb0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+
+        .section {
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .section h2 {
+            font-size: 1.4rem;
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .section p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .features {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .features ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .features li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #48bb78;
+            font-weight: bold;
+        }
+
+        .contact {
+            background: #e6f3ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .contact a {
+            color: #3182ce;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<center><b>Welcome to Coordina
+    <div class="container">
+        <h1>Welcome to Coordina</h1>
+        
+        <p class="subtitle">
+            Coordina is an application designed to help users organize and manage their travel plans efficiently. Our platform allows you to create itineraries and collaborate with friends or family on upcoming trips.
+        </p>
 
-Coordina is an application designed to help users organize and manage their travel plans efficiently. Our platform allows you to create itineraries and collaborate with friends or family on upcoming trips.
+        <div class="section">
+            <h2>How We Use SMS</h2>
+            <p>
+                To keep your account secure, we use SMS verification. When you sign up or log in, you'll receive a one-time code via text message to confirm your identity. This helps ensure that only you can access your account.
+            </p>
+            
+            <div class="features">
+                <ul>
+                    <li>We do not send promotional or marketing messages</li>
+                    <li>SMS is used strictly for account verification and security purposes</li>
+                </ul>
+            </div>
+        </div>
 
-How We Use SMS
-To keep your account secure, we use SMS verification. When you sign up or log in, you’ll receive a one-time code via text message to confirm your identity. This helps ensure that only you can access your account.
-    •    We do not send promotional or marketing messages.
-    •    SMS is used strictly for account verification and security purposes.
-
-Contact
-If you have any questions, please contact us at daviddick156@gmail.com</b></center>
+        <div class="contact">
+            <h2>Contact</h2>
+            <p>
+                If you have any questions, please contact us at 
+                <a href="mailto:daviddick156@gmail.com">daviddick156@gmail.com</a>
+            </p>
+        </div>
+    </div>
 </body>
 </html>
