@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coordina</title>
+    <title>Coordina - Travel Planning Made Simple</title>
     <style>
         * {
             margin: 0;
@@ -15,127 +15,527 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
             color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 0 20px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #4299e1;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #4299e1;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: #4a5568;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
             background: linear-gradient(135deg, #4299e1 0%, #2b6cb0 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="70" r="1.5" fill="rgba(255,255,255,0.1)"/></svg>');
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: slideUp 1s ease forwards;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: slideUp 1s ease 0.3s forwards;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: slideUp 1s ease 0.6s forwards;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #4299e1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #4299e1;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 20px;
+            background: #f8f9fa;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        h1 {
+        .section-title {
+            text-align: center;
             font-size: 2.5rem;
             color: #4a5568;
-            margin-bottom: 20px;
+            margin-bottom: 60px;
             font-weight: 700;
         }
 
-        .subtitle {
-            font-size: 1.1rem;
-            color: #666;
-            margin-bottom: 30px;
-            line-height: 1.7;
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
         }
 
-        .section {
-            margin: 30px 0;
-            text-align: left;
+        .feature-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
         }
 
-        .section h2 {
-            font-size: 1.4rem;
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #4299e1, #2b6cb0);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
             color: #4a5568;
             margin-bottom: 15px;
             font-weight: 600;
         }
 
-        .section p {
-            margin-bottom: 15px;
+        .feature-card p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* SMS Section */
+        .sms-section {
+            padding: 100px 20px;
+            background: white;
+        }
+
+        .sms-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .sms-text h2 {
+            font-size: 2.2rem;
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .sms-text p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .sms-features {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .sms-features ul {
+            list-style: none;
+        }
+
+        .sms-features li {
+            padding: 10px 0;
+            position: relative;
+            padding-left: 30px;
             color: #555;
         }
 
-        .features {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 15px 0;
-        }
-
-        .features ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .features li {
-            padding: 8px 0;
-            position: relative;
-            padding-left: 25px;
-        }
-
-        .features li::before {
+        .sms-features li::before {
             content: "✓";
             position: absolute;
             left: 0;
             color: #48bb78;
             font-weight: bold;
+            font-size: 1.2rem;
         }
 
+        .sms-examples {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .sms-image {
+            text-align: center;
+        }
+
+        .phone-screenshot {
+            width: 180px;
+            height: auto;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            border: 1px solid #ddd;
+        }
+
+        .image-caption {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* About Section */
+        .about {
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .about h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .about p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Contact Section */
         .contact {
-            background: #e6f3ff;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 30px;
+            padding: 100px 20px;
+            background: #f8f9fa;
+            text-align: center;
         }
 
-        .contact a {
-            color: #3182ce;
+        .contact h2 {
+            font-size: 2.5rem;
+            color: #4a5568;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .contact-info {
+            background: white;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-info p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .contact-info a {
+            color: #4299e1;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 1.2rem;
         }
 
-        .contact a:hover {
+        .contact-info a:hover {
             text-decoration: underline;
         }
 
+        /* Footer */
+        .footer {
+            background: #2d3748;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .footer p {
+            margin-bottom: 10px;
+        }
+
+        /* Page Sections for SPA */
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .container {
-                padding: 25px;
-                margin: 10px;
+            .nav-links {
+                display: none;
             }
-            
-            h1 {
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .sms-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .sms-examples {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .phone-screenshot {
+                width: 150px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
                 font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to Coordina</h1>
-        
-        <p class="subtitle">
-            Coordina is an application designed to help users organize and manage their travel plans efficiently. Our platform allows you to create itineraries and collaborate with friends or family on upcoming trips.
-        </p>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo" onclick="showPage('home')">Coordina</a>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')" class="active" id="home-link">Home</a></li>
+                <li><a href="#" onclick="showPage('about')" id="about-link">About</a></li>
+                <li><a href="#" onclick="showPage('contact')" id="contact-link">Contact</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
 
-       <div class="section">
-            <h2>How We Use SMS</h2>
-            <p>
-                To keep your account secure, we use SMS verification. When you sign up or log in, you'll receive a one-time code via text message to confirm your identity. This helps ensure that only you can access your account.
-            </p>
-            
-            <div class="sms-examples">
-                <div class="sms-container">
+    <!-- Home Page -->
+    <div id="home" class="page-section active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Plan Your Perfect Trip</h1>
+                <p class="subtitle">Coordina makes travel planning effortless. Create itineraries, collaborate with friends, and discover amazing destinations all in one place.</p>
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary">Get Started</a>
+                    <a href="#" onclick="showPage('about')" class="btn btn-secondary">Learn More</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">Why Choose Coordina?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🗺️</div>
+                        <h3>Smart Itineraries</h3>
+                        <p>Create detailed travel plans with our intelligent itinerary builder. Add places, activities, and notes all in one organized timeline.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👥</div>
+                        <h3>Collaborate with Friends</h3>
+                        <p>Share your travel plans with friends and family. Everyone can contribute ideas, vote on activities, and stay updated in real-time.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📱</div>
+                        <h3>Mobile Optimized</h3>
+                        <p>Access your travel plans anywhere, anytime. Our mobile-friendly design ensures you have all your trip details at your fingertips.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Secure & Private</h3>
+                        <p>Your travel information is protected with industry-standard security. We use SMS verification to keep your account safe.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💡</div>
+                        <h3>Smart Suggestions</h3>
+                        <p>Get personalized recommendations for restaurants, attractions, and activities based on your interests and travel style.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🌍</div>
+                        <h3>Global Coverage</h3>
+                        <p>Plan trips anywhere in the world. Our extensive database covers destinations across all continents and cultures.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SMS Section -->
+        <section class="sms-section">
+            <div class="sms-content">
+                <div class="sms-text">
+                    <h2>Secure SMS Verification</h2>
+                    <p>To keep your account secure, we use SMS verification. When you sign up or log in, you'll receive a one-time code via text message to confirm your identity.</p>
+                    <div class="sms-features">
+                        <ul>
+                            <li>No promotional or marketing messages</li>
+                            <li>Used strictly for account verification and security</li>
+                            <li>Easy opt-out process - just reply "STOP"</li>
+                            <li>Your phone number is never shared with third parties</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="sms-examples">
                     <div class="sms-image">
                         <img src="images/IMG_0741.png" alt="SMS Verification Code Example" class="phone-screenshot">
                         <p class="image-caption">Verification code SMS</p>
@@ -146,31 +546,106 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="features">
-                <ul>
-                    <li>We do not send promotional or marketing messages</li>
-                    <li>SMS is used strictly for account verification and security purposes</li>
-                    <li>You can easily opt-out by replying "STOP" at any time</li>
-                </ul>
-            </div>
-        </div>
-            
-            <div class="features">
-                <ul>
-                    <li>We do not send promotional or marketing messages</li>
-                    <li>SMS is used strictly for account verification and security purposes</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="contact">
-            <h2>Contact</h2>
-            <p>
-                If you have any questions, please contact us at 
-                <a href="mailto:daviddick156@gmail.com">daviddick156@gmail.com</a>
-            </p>
-        </div>
+        </section>
     </div>
+
+    <!-- About Page -->
+    <div id="about" class="page-section">
+        <section class="about">
+            <div class="container">
+                <h2>About Coordina</h2>
+                <p>Coordina was born from the frustration of planning group trips with scattered information across multiple apps, emails, and group chats. We believe travel planning should be exciting, not overwhelming. Our mission is to simplify the way people organize and share their travel experiences, making every journey more memorable and stress-free.</p>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">Our Story</h2>
+                <div style="max-width: 800px; margin: 0 auto; text-align: left;">
+                    <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); margin-bottom: 40px;">
+                        <h3 style="color: #4a5568; margin-bottom: 20px; font-size: 1.5rem;">The Problem</h3>
+                        <p style="color: #666; margin-bottom: 20px;">Planning trips with friends and family often becomes chaotic. Information gets scattered across different platforms, important details are missed, and coordination becomes a nightmare instead of excitement.</p>
+                    </div>
+                    
+                    <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); margin-bottom: 40px;">
+                        <h3 style="color: #4a5568; margin-bottom: 20px; font-size: 1.5rem;">Our Solution</h3>
+                        <p style="color: #666; margin-bottom: 20px;">Coordina brings everything together in one place. Create beautiful itineraries, invite your travel companions, and collaborate in real-time. Everyone stays in the loop, and nothing gets forgotten.</p>
+                    </div>
+
+                    <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+                        <h3 style="color: #4a5568; margin-bottom: 20px; font-size: 1.5rem;">Our Vision</h3>
+                        <p style="color: #666; margin-bottom: 20px;">We envision a world where travel planning brings people together rather than stressing them out. Where the journey begins with the first shared idea, and every step of planning becomes part of the adventure.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page-section">
+        <section class="contact">
+            <div class="container">
+                <h2>Get in Touch</h2>
+                <div class="contact-info">
+                    <p>Have questions about Coordina? Need help with your account? We'd love to hear from you!</p>
+                    <p>Email us at: <a href="mailto:daviddick156@gmail.com">daviddick156@gmail.com</a></p>
+                    <p style="margin-top: 30px; color: #888; font-size: 1rem;">We typically respond within 24 hours.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Coordina. All rights reserved.</p>
+            <p>Making travel planning simple and collaborative.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple SPA navigation
+        function showPage(pageName) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageName).classList.add('active');
+            
+            // Update navigation active state
+            const links = document.querySelectorAll('.nav-links a');
+            links.forEach(link => {
+                link.classList.remove('active');
+            });
+            document.getElementById(pageName + '-link').classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Add smooth scrolling and animations on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            }
+        });
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const hero = document.querySelector('.hero');
+            const heroContent = hero.querySelector('.hero-content');
+            const elements = heroContent.querySelectorAll('h1, .subtitle, .cta-buttons');
+            
+            elements.forEach(el => {
+                el.style.transform = 'translateY(30px)';
+            });
+        });
+    </script>
 </body>
 </html>
