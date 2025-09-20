@@ -445,28 +445,39 @@
 
             .section-title {
                 font-size: 2rem;
+                /* Add this to the existing styles */
+            @media (max-width: 768px) {
+                #appLinkItem a {
+                    display: block;
+                    margin-top: 10px;
+                    text-align: center;
+                }
             }
-        }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo" onclick="showPage('home')">Coordina</a>
-            <ul class="nav-links">
-                <li><a href="#" onclick="showPage('home')" class="active" id="home-link">Home</a></li>
-                <li><a href="#" onclick="showPage('about')" id="about-link">About</a></li>
-                <li><a href="#" onclick="showPage('contact')" id="contact-link">Contact</a></li>
-            </ul>
-            <div class="mobile-menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="#" class="logo" onclick="showPage('home')">Coordina</a>
+        <ul class="nav-links">
+            <li><a href="#" onclick="showPage('home')" class="active" id="home-link">Home</a></li>
+            <li><a href="#" onclick="showPage('about')" id="about-link">About</a></li>
+            <li><a href="#" onclick="showPage('contact')" id="contact-link">Contact</a></li>
+            <!-- This will be dynamically shown for logged-in users -->
+            <li id="appLinkItem" style="display: none;">
+                <a href="app.html" style="background: linear-gradient(135deg, #4299e1, #2b6cb0); color: white; padding: 8px 20px; border-radius: 20px; font-weight: 600;">
+                    Go to App →
+                </a>
+            </li>
+        </ul>
+        <div class="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-    </nav>
-
+    </div>
+</nav>
     <!-- Home Page -->
     <div id="home" class="page-section active">
         <!-- Hero Section -->
@@ -475,7 +486,7 @@
                 <h1>Plan Your Perfect Trip</h1>
                 <p class="subtitle">Coordina makes travel planning effortless. Create itineraries, collaborate with friends, and discover amazing destinations all in one place.</p>
                 <div class="cta-buttons">
-                    <a href="#" class="btn btn-primary">Get Started</a>
+                    <a href="app.html" class="btn btn-primary">Get Started</a>
                     <a href="#" onclick="showPage('about')" class="btn btn-secondary">Learn More</a>
                 </div>
             </div>
@@ -646,6 +657,54 @@
                 el.style.transform = 'translateY(30px)';
             });
         });
-    </script>
+    <!-- Firebase Auth Check -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script>
+    // Your Firebase config (same as in app.html)
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    
+    // Check if user is logged in
+    firebase.auth().onAuthStateChanged((user) => {
+        const appLinkItem = document.getElementById('appLinkItem');
+        const getStartedBtn = document.querySelector('.btn-primary');
+        
+        if (user) {
+            // User is logged in
+            // Show "Go to App" in navigation
+            if (appLinkItem) {
+                appLinkItem.style.display = 'block';
+            }
+            
+            // Change "Get Started" button to "Go to Dashboard"
+            if (getStartedBtn) {
+                getStartedBtn.textContent = 'Go to Dashboard';
+                getStartedBtn.href = 'app.html';
+            }
+        } else {
+            // User is not logged in
+            // Hide "Go to App" in navigation
+            if (appLinkItem) {
+                appLinkItem.style.display = 'none';
+            }
+            
+            // Keep "Get Started" button as is
+            if (getStartedBtn) {
+                getStartedBtn.textContent = 'Get Started';
+                getStartedBtn.href = 'app.html';
+            }
+        }
+    });
+</script>
 </body>
 </html>
