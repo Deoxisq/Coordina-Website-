@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coordina - Travel Planner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #4299e1 0%, #2b6cb0 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4299e1;
+            font-weight: bold;
+        }
+
+        .sign-out-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .sign-out-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Auth Container */
+        .auth-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+
+        .auth-logo {
+            text-align: center;
+            color: #4299e1;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .auth-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #4299e1, #2b6cb0);
+            color: white;
+        }
+
+        /* Main App Container */
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Trip Cards Grid */
+        .trips-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .trips-header h2 {
+            color: #2d3748;
+            font-size: 1.8rem;
+        }
+
+        .create-trip-btn {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .create-trip-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.3);
+        }
+
+        .trips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .trip-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .trip-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .trip-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+        }
+
+        .trip-destination {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .trip-dates {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .trip-body {
+            padding: 20px;
+        }
+
+        .trip-participants {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .participant-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .trip-status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-planning {
+            background: #fef5e7;
+            color: #f39c12;
+        }
+
+        .status-booked {
+            background: #e8f8f5;
+            color: #27ae60;
+        }
+
+        .status-completed {
+            background: #ebf5fb;
+            color: #3498db;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #4299e1;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .date-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4299e1, #2b6cb0);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #666;
+            flex: 1;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Trip Detail View */
+        .trip-detail {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .back-btn {
+            background: #f5f5f5;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .itinerary-section {
+            margin-top: 30px;
+        }
+
+        .day-header {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .activity-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .activity-time {
+            color: #4299e1;
+            font-weight: 600;
+            margin-right: 15px;
+        }
+
+        .activity-name {
+            flex: 1;
+        }
+
+        .add-activity-btn {
+            background: #f0f9ff;
+            border: 2px dashed #4299e1;
+            color: #4299e1;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .add-activity-btn:hover {
+            background: #e0f2ff;
+        }
+
+        /* Messages */
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            animation: slideIn 0.3s;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c53030;
+            border: 1px solid #fc8181;
+        }
+
+        .success-message {
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #a0aec0;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #4a5568;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .trips-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .date-inputs {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .trips-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Section -->
+    <div id="authSection" class="auth-container">
+        <div class="auth-logo">Coordina</div>
+        <p class="auth-subtitle">Plan your perfect trip</p>
+
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="switchAuthTab('login')">Sign In</button>
+            <button class="tab-btn" onclick="switchAuthTab('register')">Sign Up</button>
+        </div>
+
+        <!-- Login Form -->
+        <div id="loginForm">
+            <div class="form-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" placeholder="you@example.com">
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="••••••••">
+            </div>
+            <button class="btn btn-primary" onclick="login()" style="width: 100%;">Sign In</button>
+            <button class="btn btn-secondary" onclick="signInWithGoogle()" style="width: 100%; margin-top: 10px;">
+                Sign in with Google
+            </button>
+        </div>
+
+        <!-- Register Form -->
+        <div id="registerForm" class="hidden">
+            <div class="form-group">
+                <label for="registerName">Full Name</label>
+                <input type="text" id="registerName" placeholder="John Doe">
+            </div>
+            <div class="form-group">
+                <label for="registerEmail">Email</label>
+                <input type="email" id="registerEmail" placeholder="you@example.com">
+            </div>
+            <div class="form-group">
+                <label for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" placeholder="••••••••">
+            </div>
+            <button class="btn btn-primary" onclick="register()" style="width: 100%;">Create Account</button>
+        </div>
+
+        <div id="authError" class="error-message hidden" style="margin-top: 20px;"></div>
+    </div>
+
+    <!-- Main App -->
+    <div id="appSection" class="hidden">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo">Coordina</div>
+                <div class="user-info">
+                    <span id="userName">Loading...</span>
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <button class="sign-out-btn" onclick="signOut()">Sign Out</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- App Container -->
+        <div class="app-container">
+            <!-- Trips List View -->
+            <div id="tripsView">
+                <div class="trips-header">
+                    <h2>My Trips</h2>
+                    <button class="create-trip-btn" onclick="showCreateTripModal()">+ New Trip</button>
+                </div>
+
+                <div id="tripsGrid" class="trips-grid">
+                    <!-- Trip cards will be inserted here -->
+                </div>
+
+                <div id="emptyState" class="empty-state hidden">
+                    <div class="empty-state-icon">✈️</div>
+                    <h3>No trips yet</h3>
+                    <p>Start planning your next adventure!</p>
+                </div>
+            </div>
+
+            <!-- Trip Detail View -->
+            <div id="tripDetailView" class="hidden">
+                <button class="back-btn" onclick="showTripsView()">← Back to Trips</button>
+                <div id="tripDetailContent">
+                    <!-- Trip details will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Trip Modal -->
+    <div id="createTripModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 25px; color: #2d3748;">Create New Trip</h2>
+            <form id="createTripForm">
+                <div class="form-group">
+                    <label for="tripDestination">Destination *</label>
+                    <input type="text" id="tripDestination" placeholder="e.g., Paris, France" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tripDescription">Description</label>
+                    <textarea id="tripDescription" placeholder="What's the purpose of this trip?"></textarea>
+                </div>
+
+                <div class="date-inputs">
+                    <div class="form-group">
+                        <label for="tripStartDate">Start Date *</label>
+                        <input type="date" id="tripStartDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tripEndDate">End Date *</label>
+                        <input type="date" id="tripEndDate" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="tripStatus">Status</label>
+                    <select id="tripStatus">
+                        <option value="planning">Planning</option>
+                        <option value="booked">Booked</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="hideCreateTripModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Trip</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // TODO: Replace with your Firebase config
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        let currentUser = null;
+        let currentTripId = null;
+
+        // Auth state listener
+        auth.onAuthStateChanged((user) => {
+            currentUser = user;
+            if (user) {
+                showApp(user);
+                loadTrips();
+            } else {
+                showAuth();
+            }
+        });
+
+        // Auth Functions
+        function switchAuthTab(tab) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(t => t.classList.remove('active'));
+            
+            if (tab === 'login') {
+                tabs[0].classList.add('active');
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('registerForm').classList.add('hidden');
+            } else {
+                tabs[1].classList.add('active');
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('registerForm').classList.remove('hidden');
+            }
+            hideAuthError();
+        }
+
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showAuthError('Please fill in all fields');
+                return;
+            }
+
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+            } catch (error) {
+                showAuthError(error.message);
+            }
+        }
+
+        async function register() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            
+            if (!name || !email || !password) {
+                showAuthError('Please fill in all fields');
+                return;
+            }
+
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                await userCredential.user.updateProfile({ displayName: name });
+                
+                // Create user document in Firestore
+                await db.collection('users').doc(userCredential.user.uid).set({
+                    name: name,
+                    email: email,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (error) {
+                showAuthError(error.message);
+            }
+        }
+
+        async function signInWithGoogle() {
+            try {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                const result = await auth.signInWithPopup(provider);
+                
+                // Create/update user document in Firestore
+                await db.collection('users').doc(result.user.uid).set({
+                    name: result.user.displayName,
+                    email: result.user.email,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+            } catch (error) {
+                showAuthError(error.message);
+            }
+        }
+
+        async function signOut() {
+            try {
+                await auth.signOut();
+            } catch (error) {
+                console.error('Sign out error:', error);
+            }
+        }
+
+        function showAuthError(message) {
+            const errorDiv = document.getElementById('authError');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function hideAuthError() {
+            document.getElementById('authError').classList.add('hidden');
+        }
+
+        // App Functions
+        function showAuth() {
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('appSection').classList.add('hidden');
+        }
+
+        function showApp(user) {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('appSection').classList.remove('hidden');
+            
+            // Update user info in header
+            document.getElementById('userName').textContent = user.displayName || user.email;
+            document.getElementById('userAvatar').textContent = 
+                (user.displayName || user.email).charAt(0).toUpperCase();
+        }
+
+        // Trip Functions
+        async function loadTrips() {
+            if (!currentUser) return;
+
+            const tripsGrid = document.getElementById('tripsGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            try {
+                const snapshot = await db.collection('trips')
+                    .where('userId', '==', currentUser.uid)
+                    .orderBy('createdAt', 'desc')
+                    .get();
+                
+                if (snapshot.empty) {
+                    tripsGrid.innerHTML = '';
+                    emptyState.classList.remove('hidden');
+                } else {
+                    emptyState.classList.add('hidden');
+                    tripsGrid.innerHTML = '';
+                    
+                    snapshot.forEach((doc) => {
+                        const trip = doc.data();
+                        const tripCard = createTripCard(doc.id, trip);
+                        tripsGrid.appendChild(tripCard);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading trips:', error);
+                tripsGrid.innerHTML = '<p style="color: red;">Error loading trips</p>';
+            }
+        }
+
+        function createTripCard(id, trip) {
+            const card = document.createElement('div');
+            card.className = 'trip-card';
+            card.onclick = () => showTripDetail(id, trip);
+            
+            const startDate = trip.startDate ? new Date(trip.startDate.toDate()).toLocaleDateString() : 'TBD';
+            const endDate = trip.endDate ? new Date(trip.endDate.toDate()).toLocaleDateString() : 'TBD';
+            
+            card.innerHTML = `
+                <div class="trip-header">
+                    <div class="trip-destination">${trip.destination || 'Untitled Trip'}</div>
+                    <div class="trip-dates">${startDate} - ${endDate}</div>
+                </div>
+                <div class="trip-body">
+                    <div class="trip-participants">
+                        <div class="participant-avatar">${(currentUser.displayName || currentUser.email).charAt(0).toUpperCase()}</div>
+                    </div>
+                    <span class="trip-status status-${trip.status || 'planning'}">${trip.status || 'Planning'}</span>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function showCreateTripModal() {
+            document.getElementById('createTripModal').classList.add('active');
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tripStartDate').min = today;
+            document.getElementById('tripEndDate').min = today;
+        }
+
+        function hideCreateTripModal() {
+            document.getElementById('createTripModal').classList.remove('active');
+            document.getElementById('createTripForm').reset();
+        }
+
+        // Create trip form submission
+        document.getElementById('createTripForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!currentUser) return;
+            
+            const tripData = {
+                destination: document.getElementById('tripDestination').value,
+                description: document.getElementById('tripDescription').value,
+                startDate: firebase.firestore.Timestamp.fromDate(new Date(document.getElementById('tripStartDate').value)),
+                endDate: firebase.firestore.Timestamp.fromDate(new Date(document.getElementById('tripEndDate').value)),
+                status: document.getElementById('tripStatus').value,
+                userId: currentUser.uid,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                participants: [currentUser.email],
+                activities: []
+            };
+            
+            try {
+                await db.collection('trips').add(tripData);
+                hideCreateTripModal();
+                loadTrips();
+            } catch (error) {
+                console.error('Error creating trip:', error);
+                alert('Error creating trip. Please try again.');
+            }
+        });
+
+        function showTripDetail(tripId, trip) {
+            currentTripId = tripId;
+            document.getElementById('tripsView').classList.add('hidden');
+            document.getElementById('tripDetailView').classList.remove('hidden');
+            
+            const startDate = trip.startDate ? new Date(trip.startDate.toDate()).toLocaleDateString() : 'TBD';
+            const endDate = trip.endDate ? new Date(trip.endDate.toDate()).toLocaleDateString() : 'TBD';
+            
+            const detailContent = document.getElementById('tripDetailContent');
+            detailContent.innerHTML = `
+                <div class="trip-detail">
+                    <h2 style="color: #2d3748; margin-bottom: 10px;">${trip.destination}</h2>
+                    <p style="color: #666; margin-bottom: 20px;">${trip.description || 'No description'}</p>
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
+                        <div>
+                            <strong>Dates:</strong> ${startDate} - ${endDate}
+                        </div>
+                        <div>
+                            <strong>Status:</strong> 
+                            <span class="trip-status status-${trip.status}">${trip.status}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="itinerary-section">
+                        <h3 style="margin-bottom: 20px; color: #2d3748;">Itinerary</h3>
+                        <div id="itineraryContent">
+                            <div class="day-header">Day 1 - ${startDate}</div>
+                            <div class="add-activity-btn" onclick="addActivity()">+ Add Activity</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showTripsView() {
+            document.getElementById('tripDetailView').classList.add('hidden');
+            document.getElementById('tripsView').classList.remove('hidden');
+            currentTripId = null;
+        }
+
+        function addActivity() {
+            // This would open a modal to add activities to the itinerary
+            alert('Activity adding feature would be implemented here with a modal form');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('createTripModal');
+            if (event.target == modal) {
+                hideCreateTripModal();
+            }
+        }
+    </script>
+</body>
+</html>
